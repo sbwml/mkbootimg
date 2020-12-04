@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DIR=boot-tmp
+mkdir -p $DIR
+rm -rf $DIR/*
+echo
+echo "Logs:"
+echo
+unpackbootimg -i $1 -o $DIR
+echo
+echo "$1 unpacked to the $DIR directory."
+echo

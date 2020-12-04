@@ -1,0 +1,39 @@
+#!/bin/bash
+
+DIR=boot-tmp
+
+if [ ! -d "$DIR" ]; then
+  echo
+  echo "The current path does not find the $DIR directory."
+  echo
+  exit 0;
+fi
+
+BOARD_KERNEL_CMDLINE=$(cat $DIR/boot.img-cmdline)
+BOARD_KERNEL_BASE=0x$(cat $DIR/boot.img-base)
+BOARD_NAME=
+BOARD_PAGE_SIZE=$(cat $DIR/boot.img-pagesize)
+BOARD_HASH_TYPE=$(cat $DIR/boot.img-hash)
+BOARD_KERNEL_OFFSET=0x$(cat $DIR/boot.img-kerneloff)
+BOARD_RAMDISK_OFFSET=0x$(cat $DIR/boot.img-ramdiskoff)
+BOARD_SECOND_OFFSET=0x$(cat $DIR/boot.img-secondoff)
+BOARD_TAGS_OFFSET=0x$(cat $DIR/boot.img-tagsoff)
+BOARD_OS_VERSION=$(cat $DIR/boot.img-osversion)
+BOARD_OS_PATCH_LEVEL=$(cat $DIR/boot.img-oslevel)
+
+mkbootimg \
+    --kernel $DIR/boot.img-zImage \
+    --ramdisk $DIR/boot.img-ramdisk.gz \
+    --cmdline "$BOARD_KERNEL_CMDLINE" \
+    --base $BOARD_KERNEL_BASE \
+    --pagesize $BOARD_PAGE_SIZE \
+    --kernel_offset $BOARD_KERNEL_OFFSET \
+    --ramdisk_offset $BOARD_RAMDISK_OFFSET \
+    --second_offset $BOARD_SECOND_OFFSET \
+    --tags_offset $BOARD_TAGS_OFFSET \
+    --os_version $BOARD_OS_VERSION \
+    --os_patch_level $BOARD_OS_PATCH_LEVEL \
+    -o new-boot.img
+echo
+echo "Create new-boot.img ..."
+echo
